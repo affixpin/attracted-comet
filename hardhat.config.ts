@@ -81,12 +81,7 @@ export function requireEnv(varName, msg?: string): string {
 // required environment variables
 [
   'ETHERSCAN_KEY',
-  'SNOWTRACE_KEY',
   'INFURA_KEY',
-  'POLYGONSCAN_KEY',
-  'ARBISCAN_KEY',
-  'LINEASCAN_KEY',
-  'OPTIMISMSCAN_KEY'
 ].map((v) => requireEnv(v));
 
 // Networks
@@ -226,6 +221,13 @@ const config: HardhatUserConfig = {
       // this should only be relied upon for test harnesses and coverage (which does not use viaIR flag)
       allowUnlimitedContractSize: true,
       hardfork: 'shanghai'
+    },
+
+    anvil: {
+      chainId: 31337,
+      accounts: ETH_PK ?
+        [...deriveAccounts(ETH_PK)].map(privateKey => ({ privateKey, balance: (10n ** 36n).toString() }))
+        : { mnemonic: MNEMONIC, accountsBalance: (10n ** 36n).toString() },
     },
   },
 
